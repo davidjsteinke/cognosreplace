@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cognos Analytics</title>
+  <link rel="stylesheet" href="taskpane.css" />
+</head>
+<body>
+  <!-- Login Panel -->
+  <div id="panel-login" class="panel">
+    <div class="brand">
+      <div class="brand-icon">C</div>
+      <div>
+        <div class="brand-title">Cognos Analytics</div>
+        <div class="brand-sub">Campus Finance Reporting</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="input-username">AD Username</label>
+      <input type="text" id="input-username" autocomplete="username" placeholder="jdoe" />
+    </div>
+    <div class="form-group">
+      <label for="input-password">Password</label>
+      <input type="password" id="input-password" autocomplete="current-password" />
+    </div>
+    <button class="btn btn-primary btn-full" id="btn-login">Sign In</button>
+    <div id="login-error" class="status-error hidden"></div>
+  </div>
+
+  <!-- Main Panel (shown after login) -->
+  <div id="panel-main" class="panel hidden">
+
+    <!-- Header bar -->
+    <div class="header-bar">
+      <span id="header-username" class="header-user"></span>
+      <button class="btn btn-link" id="btn-logout">Sign out</button>
+    </div>
+
+    <!-- Tab navigation -->
+    <div class="tabs">
+      <button class="tab active" data-tab="browser">Reports</button>
+      <button class="tab" data-tab="presets">Presets</button>
+    </div>
+
+    <!-- ── Report Browser tab ── -->
+    <div id="tab-browser" class="tab-content active">
+
+      <!-- Breadcrumb -->
+      <div id="breadcrumb" class="breadcrumb">
+        <span class="crumb crumb-root" data-id="root">Home</span>
+      </div>
+
+      <!-- Content list -->
+      <div id="content-list" class="content-list">
+        <div class="loading-msg">Loading…</div>
+      </div>
+
+      <!-- Parameter panel (shown after report selection) -->
+      <div id="panel-params" class="params-panel hidden">
+        <div class="section-title" id="selected-report-name"></div>
+
+        <!-- Core parameters -->
+        <div class="param-section">
+          <div class="param-section-title">Parameters</div>
+
+          <div class="form-group">
+            <label for="param-department">Department</label>
+            <select id="param-department">
+              <option value="">(All Departments)</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="param-start">Start Date</label>
+              <input type="date" id="param-start" />
+            </div>
+            <div class="form-group">
+              <label for="param-end">End Date</label>
+              <input type="date" id="param-end" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Extended parameters (collapsed by default) -->
+        <details class="extended-params">
+          <summary>Advanced Parameters</summary>
+
+          <div class="form-group">
+            <label for="param-fiscal-year">Fiscal Year</label>
+            <select id="param-fiscal-year">
+              <option value="">(Not set)</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="param-fund">Fund / Account Code</label>
+              <input type="text" id="param-fund" placeholder="e.g. 110" />
+            </div>
+            <div class="form-group">
+              <label for="param-cost-center">Cost Center</label>
+              <input type="text" id="param-cost-center" placeholder="e.g. 6100" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="param-budget-view">Budget vs. Actual</label>
+            <select id="param-budget-view">
+              <option value="">(Not set)</option>
+              <option value="budget">Budget Only</option>
+              <option value="actual">Actuals Only</option>
+              <option value="both">Both</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="param-gl-type">GL Account Type</label>
+            <select id="param-gl-type">
+              <option value="">(All Types)</option>
+              <option value="revenue">Revenue</option>
+              <option value="expense">Expense</option>
+              <option value="asset">Asset</option>
+              <option value="liability">Liability</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="param-grant">Grant / Project Code</label>
+            <input type="text" id="param-grant" placeholder="e.g. G-2024-001" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="param-reporting-period">Reporting Period</label>
+              <select id="param-reporting-period">
+                <option value="">(Not set)</option>
+                <option value="month">Monthly</option>
+                <option value="quarter">Quarterly</option>
+                <option value="ytd">Year-to-Date</option>
+                <option value="year">Full Year</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="param-comparison">Comparison Period</label>
+              <select id="param-comparison">
+                <option value="">(None)</option>
+                <option value="prior_year">Prior Year</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Multi-Department Select</label>
+            <div id="multi-dept-list" class="multi-select-list"></div>
+          </div>
+        </details>
+
+        <!-- Output mode -->
+        <div class="form-group toggle-row">
+          <label class="toggle-label">
+            <input type="checkbox" id="param-raw-mode" />
+            <span>Raw / flat table mode</span>
+          </label>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="action-row">
+          <button class="btn btn-primary" id="btn-run">Run Report</button>
+          <button class="btn btn-secondary" id="btn-save-preset">Save Preset</button>
+        </div>
+
+        <!-- Inline preset name input (shown when Save Preset is clicked) -->
+        <div id="preset-name-area" class="preset-name-area hidden">
+          <input type="text" id="preset-name-field" placeholder="Enter preset name" />
+          <div class="preset-name-actions">
+            <button class="btn btn-primary btn-sm" id="preset-name-save">Save</button>
+            <button class="btn btn-secondary btn-sm" id="preset-name-cancel">Cancel</button>
+          </div>
+        </div>
+
+        <div id="report-status" class="status-area"></div>
+      </div>
+    </div>
+
+    <!-- ── Presets tab ── -->
+    <div id="tab-presets" class="tab-content">
+      <div class="section-title">Saved Presets</div>
+      <p class="help-text">Presets are saved locally on this machine only.</p>
+      <div id="presets-list" class="presets-list">
+        <div class="empty-msg">No presets saved yet.</div>
+      </div>
+    </div>
+
+    <!-- Inline confirmation bar (used instead of window.confirm for overwrite prompts) -->
+    <div id="confirm-bar" class="confirm-bar hidden">
+      <div id="confirm-bar-msg" class="confirm-bar-msg"></div>
+      <div class="confirm-bar-actions">
+        <button class="btn btn-primary btn-sm" id="confirm-bar-yes">Yes, overwrite</button>
+        <button class="btn btn-secondary btn-sm" id="confirm-bar-no">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Refresh bar (shown when a report is in the sheet) -->
+    <div id="refresh-bar" class="refresh-bar hidden">
+      <span id="refresh-info" class="refresh-info"></span>
+      <button class="btn btn-secondary btn-sm" id="btn-refresh">↻ Refresh</button>
+    </div>
+
+    <!-- Global status -->
+    <div id="global-status" class="status-area"></div>
+  </div>
+
+  <!-- Office JS -->
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <script src="taskpane.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "cognos-excel-addin",
+  "version": "1.0.0",
+  "description": "On-premises IBM Cognos Analytics Excel Task Pane Add-in",
+  "scripts": {
+    "start": "node server.js",
+    "mock": "node mock-server/server.js",
+    "dev": "concurrently \"npm run mock\" \"npm run start\""
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "node-fetch": "^2.7.0",
+    "kerberos": "^2.1.1",
+    "https": "^1.0.0",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "dotenv": "^16.3.1",
+    "cookie-parser": "^1.4.6"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
